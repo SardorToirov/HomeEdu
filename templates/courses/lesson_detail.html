@@ -1,0 +1,33 @@
+{% extends "site_base.html" %}
+{% block title %}{{ lesson.title }} — HomeEdu{% endblock %}
+{% block content %}
+<div class="row">
+  <div>
+    <h1 class="h1">{{ lesson.title }}</h1>
+    <p class="sub">{{ lesson.course.title }}</p>
+  </div>
+  <a class="btn small" href="{% url 'courses:detail' lesson.course.id %}">← Kurs</a>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+  {% if lesson.video_file %}
+    <div style="margin-top:16px; border-radius:16px; overflow:hidden; border:1px solid rgba(0,0,0,.10); background:#000;">
+      <video controls preload="metadata"
+             style="width:100%; display:block; max-height:520px; background:#000;">
+        <source src="{{ lesson.video_file.url }}">
+        Brauzeringiz video formatni qo‘llamaydi.
+      </video>
+    </div>
+  {% endif %}
+
+  {% if lesson.text %}
+    <div style="margin-top:14px; line-height: 1.7;">{{ lesson.text|linebreaks }}</div>
+  {% endif %}
+
+  {% if lesson.pdf_file %}
+    <div style="margin-top:14px;">
+      <a class="btn" href="{{ lesson.pdf_file.url }}" target="_blank">PDF ochish</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

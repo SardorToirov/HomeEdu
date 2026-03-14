@@ -1,0 +1,129 @@
+{% load static %}
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}HomeEdu{% endblock %}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/homedu_pages.css' %}" />
+</head>
+<body>
+
+<header class="header">
+  <div class="container nav">
+    <a class="brand" href="{% url 'home' %}">HomeEdu</a>
+
+    <nav class="navlinks" id="navlinks" aria-label="Asosiy menyu">
+      <a href="{% url 'home' %}#home">Bosh sahifa</a>
+      <a href="{% url 'education:grades' %}">Maktab</a>
+      <a href="{% url 'parents:list' %}">Ota-onalar</a>
+      <a href="{% url 'courses:list' %}">Kurslar</a>
+      <a href="{% url 'courses:list' %}">Vakansiya</a>
+      <a href="{% url 'contact:contact' %}">Aloqa</a>
+    </nav>
+
+    <div class="profile">
+
+      <!-- Til tanlash -->
+      <div class="lang">
+        <button class="lang-btn" type="button" onclick="toggleLang()" aria-label="Tilni tanlash">
+          <img id="currentFlag" class="flag" src="{% static 'img/flags/uz.png' %}" alt="UZ" />
+        </button>
+
+        <div id="langMenu" class="lang-menu" role="menu">
+          <button type="button" class="lang-item" onclick="setLang('uz','{% static 'img/flags/uz.png' %}')">
+            <img class="flag" src="{% static 'img/flags/uz.png' %}" alt="UZ" />
+            <span>Uzbek</span>
+          </button>
+
+          <button type="button" class="lang-item" onclick="setLang('ru','{% static 'img/flags/ru.png' %}')">
+            <img class="flag" src="{% static 'img/flags/ru.png' %}" alt="RU" />
+            <span>Русский</span>
+          </button>
+
+          <button type="button" class="lang-item" onclick="setLang('en','{% static 'img/flags/en.png' %}')">
+            <img class="flag" src="{% static 'img/flags/en.png' %}" alt="EN" />
+            <span>English</span>
+          </button>
+        </div>
+      </div>
+
+      {% if request.user.is_authenticated %}
+        <a class="profil linklike" href="{% url 'core:dashboard' %}">Profil</a>
+      {% else %}
+        <a class="profil linklike" href="{% url 'accounts:login' %}">Kirish</a>
+      {% endif %}
+
+    </div>
+
+
+  </div>
+</header>
+
+<main class="container page">
+  {% if messages %}
+    <div class="flashwrap">
+      {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="container foot">
+    <div class="muted">© {% now "Y" %} HomeEdu</div>
+    <div class="muted">O‘zbekiston uchun inklyuziv ta’lim va ish platformasi</div>
+  </div>
+</footer>
+<div id="google_translate_element" style="display:none;"></div>
+
+<script>
+function toggleLang(){
+  document.getElementById("langMenu").classList.toggle("open");
+}
+
+document.addEventListener("click", function(e){
+  const lang = document.querySelector(".lang");
+  const menu = document.getElementById("langMenu");
+  if(!lang.contains(e.target)){
+    menu.classList.remove("open");
+  }
+});
+
+function setCookie(name,value){
+  document.cookie = name+"="+value+";path=/";
+}
+
+function setLang(lang,flag){
+  setCookie("googtrans","/uz/"+lang);
+  localStorage.setItem("flag",flag);
+  localStorage.setItem("lang",lang);
+  location.reload();
+}
+
+window.onload=function(){
+  const f = localStorage.getItem("flag");
+  if(f){
+    document.getElementById("currentFlag").src=f;
+  }
+}
+
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {pageLanguage: 'uz', autoDisplay: false},
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
