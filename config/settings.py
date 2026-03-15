@@ -1,4 +1,3 @@
-
 import os
 from pathlib import Path
 import dj_database_url
@@ -6,27 +5,20 @@ import dj_database_url
 # BASE DIRECTORY
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # SECURITY
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-dev-key")
-
 DEBUG = os.environ.get("DEBUG", "False") == "True"
-
 ALLOWED_HOSTS = ["*"]
-
 
 # APPLICATIONS
 INSTALLED_APPS = [
-    "cloudinary_storage",
-
+    # Cloudinary-lar bu yerdan olib tashlandi
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    "cloudinary",
 
     # your apps
     "home",
@@ -38,12 +30,10 @@ INSTALLED_APPS = [
     "contact",
 ]
 
-
 # MIDDLEWARE
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-
+    "whitenoise.middleware.WhiteNoiseMiddleware", # Statik fayllar uchun
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -52,9 +42,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 ROOT_URLCONF = "config.urls"
-
 
 # TEMPLATES
 TEMPLATES = [
@@ -73,9 +61,7 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = "config.wsgi.application"
-
 
 # DATABASE
 if os.environ.get("DATABASE_URL"):
@@ -93,78 +79,42 @@ else:
         }
     }
 
-
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
-
 
 # INTERNATIONALIZATION
 LANGUAGE_CODE = "uz"
-
 TIME_ZONE = "Asia/Tashkent"
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 # STATIC FILES
 STATIC_URL = "/static/"
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 WHITENOISE_MANIFEST_STRICT = False
-WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 
-
-# MEDIA FILES
+# MEDIA FILES (Local storage holatiga qaytarildi)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-
-# CLOUDINARY STORAGE
-CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
-    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
-}
-
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
+# Cloudinary o'rniga standart saqlash tizimi
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 # AUTH
 AUTH_USER_MODEL = "accounts.User"
-
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "core:dashboard"
 LOGOUT_REDIRECT_URL = "home"
 
-
 # SECURITY
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.onrender.com"
-]
-
+CSRF_TRUSTED_ORIGINS = ["https://*.onrender.com"]
 
 # DEFAULT FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
